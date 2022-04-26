@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/">Homepage</a>
+      <a href="/articles/new">Add Articles</a>
+    </nav>
+
+    <h1><%= article.title %></h1>
+    <h3><%= article.author %></h3>
+    <% article.tags.forEach(t => { %>
+    <span><%= t %></span>
+    <% }) %>
+    <p><%= article.description %></p>
+    <h3><%= article.likes ? articles.likes : 0 %></h3>
+    <a href="">
+      <button>Like</button>
+    </a>
+    <a href="/articles/<%= article._id %>/edit">
+      <button>Edit</button>
+    </a>
+    <a href="/articles/<%= article._id %>/delete">
+      <button>Delete</button>
+    </a>
+  </body>
+</html>
