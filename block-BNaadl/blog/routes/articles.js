@@ -2,27 +2,29 @@ const express = require('express');
 const router = express.Router();
 const Article = require('../models/article');
 
+// list articles
 router.get('/', (req, res) => {
-  // fetch list of books from database
   Article.find({}, (err, articles) => {
     if (err) return next(err);
     res.render('articles', { articles });
   });
 });
 
+// create article form
 router.get('/new', (req, res) => {
   res.render('addArticle');
 });
 
+// fetch article form
 router.get('/:id', (req, res, next) => {
   const id = req.params.id;
   Article.findById(id, (err, article) => {
-    console.log(article);
     if (err) return next(err);
     res.render('articleDetails', { article: article });
   });
 });
 
+// create article
 router.post('/', (req, res, next) => {
   // capture data
 
@@ -35,6 +37,7 @@ router.post('/', (req, res, next) => {
   //   response
 });
 
+// edit article form
 router.get('/:id/edit', (req, res, next) => {
   // find the book details
   const id = req.params.id;
@@ -46,6 +49,7 @@ router.get('/:id/edit', (req, res, next) => {
   // render update form
 });
 
+// update article
 router.post('/:id', (req, res, next) => {
   // capture the updated data from form
   const id = req.params.id;
@@ -57,6 +61,7 @@ router.post('/:id', (req, res, next) => {
   });
 });
 
+// delete article
 router.get('/:id/delete', (req, res, next) => {
   const id = req.params.id;
   Article.findByIdAndDelete(id, req.body, (err, article) => {
@@ -68,7 +73,7 @@ router.get('/:id/delete', (req, res, next) => {
 // increment likes
 router.get('/:id/likes', (req, res, next) => {
   var id = req.params.id;
-  Article.findByIdAndUpdate(id, { likes: { $inc: 1 } }, (err, article) => {
+  Article.findByIdAndUpdate(id, { $inc: { likes: 1 } }, (err, article) => {
     if (err) return next(err);
     res.redirect('/articles/' + id);
   });
