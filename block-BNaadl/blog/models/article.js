@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const articleSchema = new Schema(
   {
-    title: String,
-    description: String,
-    tags: String,
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    tags: [String],
     author: String,
-    likes: Number,
+    likes: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

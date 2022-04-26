@@ -6,17 +6,17 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>List of books</h1>
-    <a href="/articles/new">Add Books</a>
+    <nav>
+      <a href="/">Homepage</a>
+      <a href="/articles/new">Add Articles</a>
+    </nav>
+    <h1>All Articles</h1>
 
-    <% articles.forEach(article => { %>
-
+    <% articles.forEach(a => { %>
     <section>
       <div>
-        <h2><%= article.title %></h2>
-        <p><%= article.description.substr(0, 200) + "..." %></p>
-        <a href="/books/<%= book._id %>">
-          <button>Show</button>
+        <a href="/articles/<%= a.id %>">
+          <h2><%= a.title %></h2>
         </a>
       </div>
     </section>
