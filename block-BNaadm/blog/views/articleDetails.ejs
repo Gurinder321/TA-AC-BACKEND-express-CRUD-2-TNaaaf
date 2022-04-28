@@ -27,13 +27,18 @@
     <a href="/articles/<%= article._id %>/delete">
       <button>Delete</button>
     </a>
-
+<h2>Add a comment</h2>
     <div>
       <form action="/articles/<%= article.id %>/comments" method="POST">
-        <textarea id="" name="content" cols="30" rows="10" placeholder="Add Comment..."></textarea>
+        <textarea id="" name="text" cols="30" rows="10" placeholder="Add Comment..."></textarea>
+        <br>
+        <input type="text" placeholder="Author">
+        <br>
         <input type="submit" value="Add Comment" />
       </form>
     </div>
+
+
     <h2>Comments</h2>
 </div>
 <% article.comments.forEach(comment => { %>
