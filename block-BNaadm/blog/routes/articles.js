@@ -81,16 +81,21 @@ router.get('/:id/likes', (req, res, next) => {
 });
 
 // add comment
-router.post('/:id/comments', (req, res) => {
-  const id = req.params.id;
-  req.body.articleId = id;
+router.post('/:articleId/comments', (req, res, next) => {
+  const articleId = req.params.articleId;
+  // req.body.articleId = id;
+  console.log(req.body);
+
+  req.body.articleId = articleId;
   Comment.create(req.body, (err, comment) => {
     if (err) return next(err);
     // update article with comment id into comment section
-    Article.findByIdAndUpdate(id, { $push: { comments: comment._id } }, (err, updatedArticle) => {
-      if (err) return next(err);
-      res.redirect('/articles/' + id);
-    });
+
+    res.redirect('/articles/' + articleId);
+
+    // Article.findByIdAndUpdate(id, { $push: { comments: comment._id } }, (err, updatedArticle) => {
+    //     if (err) return next(err);
+    //   });
   });
 });
 
