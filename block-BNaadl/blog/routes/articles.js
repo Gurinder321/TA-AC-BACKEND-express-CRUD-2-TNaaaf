@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Article = require('../models/article');
+const Comment = require('../models/comment');
 
 // list articles
 router.get('/', (req, res) => {
@@ -18,10 +19,18 @@ router.get('/new', (req, res) => {
 // fetch article form
 router.get('/:id', (req, res, next) => {
   const id = req.params.id;
-  Article.findById(id, (err, article) => {
-    if (err) return next(err);
-    res.render('articleDetails', { article: article });
-  });
+  // Article.findById(id, (err, article) => {
+  //   if (err) return next(err);
+  //   res.render('articleDetails', { article });
+  // });
+
+  Article.findById(id)
+    .populate('comments')
+    .exec((err, article) => {
+      if (err) return next(err);
+      console.log(article);
+      res.render('articleDetails', { article });
+    });
 });
 
 // create article
@@ -66,7 +75,10 @@ router.get('/:id/delete', (req, res, next) => {
   const id = req.params.id;
   Article.findByIdAndDelete(id, req.body, (err, article) => {
     if (err) return next(err);
-    res.redirect('/articles/');
+    Comment.remove({ articleId: article.id }, (err) => {
+      if (err) return next(err);
+      res.redirect('/articles/');
+    });
   });
 });
 
@@ -76,6 +88,19 @@ router.get('/:id/likes', (req, res, next) => {
   Article.findByIdAndUpdate(id, { $inc: { likes: 1 } }, (err, article) => {
     if (err) return next(err);
     res.redirect('/articles/' + id);
+  });
+});
+
+router.post('/:articleId/comments', (req, res, next) => {
+  const articleId = req.params.articleId;
+  console.log(req.body);
+  req.body.articleId = articleId;
+  Comment.create(req.body, (err, comment) => {
+    if (err) return next(err);
+    Article.findByIdAndUpdate(articleId, { $push: { comments: comment.id } }, (err, article) => {
+      if (err) return next(err);
+      res.redirect('/articles/' + articleId);
+    });
   });
 });
 
